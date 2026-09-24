@@ -13,10 +13,19 @@ export default function App() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const currentStep = quizData.find((step) => step.id === currentStepId);
   
-  // Preload images
+  // Preload images intelligently
   useEffect(() => {
-    // Images will be loaded on demand by the browser
-  }, []);
+    const nextStepId = currentStepId + 1;
+    const nextStep = quizData.find((step) => step.id === nextStepId);
+    if (nextStep && nextStep.imageUrl) {
+      const img = new Image();
+      img.src = nextStep.imageUrl;
+    } else if (nextStep && nextStep.type === 'testimonials') {
+        // Preload first testimonial image
+        const img = new Image();
+        img.src = testimonialImages[0];
+    }
+  }, [currentStepId]);
 
   // Carousel logic for testimonials
   const testimonialImages = [
@@ -122,7 +131,7 @@ const scarcityText = "";
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{currentStep.title}</h1>
                 
                 {currentStep.imageUrl && (
-                  <img src={currentStep.imageUrl} alt="Desafio" className="w-full rounded-xl mb-4" />
+                  <img src={currentStep.imageUrl} alt="Desafio" className="w-full rounded-xl mb-4" loading={currentStepId === 1 ? "eager" : "lazy"} fetchPriority={currentStepId === 1 ? "high" : "auto"} decoding="async" />
                 )}
                 
                 <p className="text-base md:text-lg text-gray-600 mb-4 whitespace-pre-line">{currentStep.description}</p>
@@ -308,6 +317,9 @@ const scarcityText = "";
                       className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
                         index === currentTestimonialIndex ? 'opacity-100' : 'opacity-0'
                       }`}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      decoding="async"
                     />
                   ))}
                 </div>
@@ -396,7 +408,7 @@ const scarcityText = "";
                 </div>
 
                 <div className="bg-white p-6 md:p-8 rounded-3xl border border-[#7738E2] shadow-[0_4px_20px_rgba(119,56,226,0.05)]">
-                  <img src="https://i.ibb.co/HT8Zxr17/Chat-GPT-Image-23-de-set-de-2026-19-52-49.webp" alt="Mockup do Produto" className="w-full h-auto mb-6 rounded-2xl" />
+                  <img src="https://i.ibb.co/HT8Zxr17/Chat-GPT-Image-23-de-set-de-2026-19-52-49.webp" alt="Mockup do Produto" className="w-full h-auto mb-6 rounded-2xl" loading="lazy" decoding="async" />
                   
                   <div className="text-center mb-6">
                     <span className="text-[10px] font-bold text-[#7738E2] uppercase tracking-widest bg-purple-50 px-3 py-1 rounded-full">OFERTA ESPECIAL</span>
@@ -457,7 +469,7 @@ const scarcityText = "";
                   <p className="text-lg text-gray-600 mb-6">{currentStep.description}</p>
                 )}
                 {currentStep.imageUrl && (
-                  <img src={currentStep.imageUrl} alt="Transição" className="w-full h-auto max-w-sm mx-auto rounded-xl mb-6" />
+                  <img src={currentStep.imageUrl} alt="Transição" className="w-full h-auto max-w-sm mx-auto rounded-xl mb-6" loading="lazy" decoding="async" />
                 )}
                 <button
                   onClick={nextStep}
