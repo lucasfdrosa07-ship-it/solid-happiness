@@ -130,8 +130,8 @@ const scarcityText = "";
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{currentStep.title}</h1>
                 
                 {currentStep.imageUrl && (
-                  <div className="w-full h-64 md:h-80 rounded-xl mb-4 overflow-hidden bg-gray-100 relative">
-                    <img src={currentStep.imageUrl} alt="Desafio" className="absolute inset-0 w-full h-full object-cover" loading={currentStepId === 1 ? "eager" : "lazy"} fetchPriority={currentStepId === 1 ? "high" : "auto"} decoding="async" />
+                  <div className="w-full h-64 md:h-80 rounded-xl mb-4 overflow-hidden bg-gray-100">
+                    <img src={currentStep.imageUrl} alt="Desafio" className="w-full h-full object-cover" loading={currentStepId === 1 ? "eager" : "lazy"} fetchPriority={currentStepId === 1 ? "high" : "auto"} decoding="async" />
                   </div>
                 )}
                 
@@ -470,8 +470,8 @@ const scarcityText = "";
                   <p className="text-lg text-gray-600 mb-6">{currentStep.description}</p>
                 )}
                 {currentStep.imageUrl && (
-                  <div className="w-full h-64 max-w-sm mx-auto rounded-xl mb-6 overflow-hidden bg-gray-100 relative">
-                    <img src={currentStep.imageUrl} alt="Transição" className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+                  <div className="w-full h-64 max-w-sm mx-auto rounded-xl mb-6 overflow-hidden bg-gray-100">
+                    <img src={currentStep.imageUrl} alt="Transição" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   </div>
                 )}
                 <button
