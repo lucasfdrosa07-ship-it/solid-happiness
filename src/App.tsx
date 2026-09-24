@@ -15,19 +15,7 @@ export default function App() {
   
   // Preload images
   useEffect(() => {
-    const images = [
-      'https://i.ibb.co/20Xchd7k/Chat-GPT-Image-23-de-set-de-2026-15-02-24.webp',
-      'https://i.ibb.co/6cWCXGtY/Whats-App-Image-2026-09-23-at-15-33-42.webp',
-      'https://i.ibb.co/HT8Zxr17/Chat-GPT-Image-23-de-set-de-2026-19-52-49.webp',
-      'https://i.ibb.co/Hp2jG8jX/Whats-App-Image-2026-09-23-at-20-43-05.webp',
-      'https://i.ibb.co/21YbFt5b/Whats-App-Image-2026-09-23-at-20-32-48.webp',
-      'https://i.ibb.co/8L38gTZd/Whats-App-Image-2026-09-23-at-20-22-22-1.webp',
-      'https://i.ibb.co/Jj8rpKX0/Whats-App-Image-2026-09-23-at-20-26-21.webp'
-    ];
-    images.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+    // Images will be loaded on demand by the browser
   }, []);
 
   // Carousel logic for testimonials
