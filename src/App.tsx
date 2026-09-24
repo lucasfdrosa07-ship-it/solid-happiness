@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft } from 'lucide-react';
 import { quizData, TOTAL_STEPS } from './data/quizData';
@@ -13,27 +13,34 @@ export default function App() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const currentStep = quizData.find((step) => step.id === currentStepId);
   
-  // Preload images intelligently
-  useEffect(() => {
-    const nextStepId = currentStepId + 1;
-    const nextStep = quizData.find((step) => step.id === nextStepId);
-    if (nextStep && nextStep.imageUrl) {
-      const img = new Image();
-      img.src = nextStep.imageUrl;
-    } else if (nextStep && nextStep.type === 'testimonials') {
-        // Preload first testimonial image
-        const img = new Image();
-        img.src = testimonialImages[0];
-    }
-  }, [currentStepId]);
-
-  // Carousel logic for testimonials
+  // Carousel logic for testimonials (moved up)
   const testimonialImages = [
     'https://i.ibb.co/Hp2jG8jX/Whats-App-Image-2026-09-23-at-20-43-05.webp',
     'https://i.ibb.co/21YbFt5b/Whats-App-Image-2026-09-23-at-20-32-48.webp',
     'https://i.ibb.co/8L38gTZd/Whats-App-Image-2026-09-23-at-20-22-22-1.webp',
     'https://i.ibb.co/Jj8rpKX0/Whats-App-Image-2026-09-23-at-20-26-21.webp'
   ];
+
+  const loadedImagesRef = useRef(new Set<string>());
+  
+  // Preload images intelligently
+  useEffect(() => {
+    const nextStepId = currentStepId + 1;
+    const nextStep = quizData.find((step) => step.id === nextStepId);
+    let imageUrlToLoad: string | null = null;
+
+    if (nextStep && nextStep.imageUrl) {
+      imageUrlToLoad = nextStep.imageUrl;
+    } else if (nextStep && nextStep.type === 'testimonials') {
+      imageUrlToLoad = testimonialImages[0];
+    }
+
+    if (imageUrlToLoad && !loadedImagesRef.current.has(imageUrlToLoad)) {
+      loadedImagesRef.current.add(imageUrlToLoad);
+      const img = new Image();
+      img.src = imageUrlToLoad;
+    }
+  }, [currentStepId]);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
 
   useEffect(() => {
