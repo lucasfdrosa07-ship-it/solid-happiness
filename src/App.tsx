@@ -470,8 +470,8 @@ const scarcityText = "";
                   <p className="text-lg text-gray-600 mb-6">{currentStep.description}</p>
                 )}
                 {currentStep.imageUrl && (
-                  <div className="w-full h-64 max-w-sm mx-auto rounded-xl mb-6 overflow-hidden bg-gray-100">
-                    <img src={currentStep.imageUrl} alt="Transição" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                  <div className="w-full max-w-sm mx-auto rounded-xl mb-6 overflow-hidden bg-gray-100 flex items-center justify-center">
+                    <img src={currentStep.imageUrl} alt="Transição" className={`w-full ${currentStepId === 2 ? 'h-auto' : 'h-64 object-cover'}`} loading="lazy" decoding="async" />
                   </div>
                 )}
                 <button
