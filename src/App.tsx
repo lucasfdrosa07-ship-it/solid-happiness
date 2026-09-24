@@ -21,26 +21,18 @@ export default function App() {
     'https://i.ibb.co/Jj8rpKX0/Whats-App-Image-2026-09-23-at-20-26-21.webp'
   ];
 
-  const loadedImagesRef = useRef(new Set<string>());
-  
-  // Preload images intelligently
+  // Preload all images on mount
   useEffect(() => {
-    const nextStepId = currentStepId + 1;
-    const nextStep = quizData.find((step) => step.id === nextStepId);
-    let imageUrlToLoad: string | null = null;
-
-    if (nextStep && nextStep.imageUrl) {
-      imageUrlToLoad = nextStep.imageUrl;
-    } else if (nextStep && nextStep.type === 'testimonials') {
-      imageUrlToLoad = testimonialImages[0];
-    }
-
-    if (imageUrlToLoad && !loadedImagesRef.current.has(imageUrlToLoad)) {
-      loadedImagesRef.current.add(imageUrlToLoad);
+    const allImages = new Set<string>();
+    quizData.forEach(step => { if (step.imageUrl) allImages.add(step.imageUrl); });
+    testimonialImages.forEach(img => allImages.add(img));
+    
+    allImages.forEach(src => {
       const img = new Image();
-      img.src = imageUrlToLoad;
-    }
-  }, [currentStepId]);
+      img.src = src;
+    });
+  }, []);
+
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
 
   useEffect(() => {
@@ -138,7 +130,9 @@ const scarcityText = "";
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{currentStep.title}</h1>
                 
                 {currentStep.imageUrl && (
-                  <img src={currentStep.imageUrl} alt="Desafio" className="w-full rounded-xl mb-4" loading={currentStepId === 1 ? "eager" : "lazy"} fetchPriority={currentStepId === 1 ? "high" : "auto"} decoding="async" />
+                  <div className="w-full h-64 md:h-80 rounded-xl mb-4 overflow-hidden bg-gray-100 relative">
+                    <img src={currentStep.imageUrl} alt="Desafio" className="absolute inset-0 w-full h-full object-cover" loading={currentStepId === 1 ? "eager" : "lazy"} fetchPriority={currentStepId === 1 ? "high" : "auto"} decoding="async" />
+                  </div>
                 )}
                 
                 <p className="text-base md:text-lg text-gray-600 mb-4 whitespace-pre-line">{currentStep.description}</p>
@@ -476,7 +470,9 @@ const scarcityText = "";
                   <p className="text-lg text-gray-600 mb-6">{currentStep.description}</p>
                 )}
                 {currentStep.imageUrl && (
-                  <img src={currentStep.imageUrl} alt="Transição" className="w-full h-auto max-w-sm mx-auto rounded-xl mb-6" loading="lazy" decoding="async" />
+                  <div className="w-full h-64 max-w-sm mx-auto rounded-xl mb-6 overflow-hidden bg-gray-100 relative">
+                    <img src={currentStep.imageUrl} alt="Transição" className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
+                  </div>
                 )}
                 <button
                   onClick={nextStep}
